@@ -1,0 +1,38 @@
+language: android
+
+os:
+  - linux
+
+services:
+  - xvfb
+
+addons:
+  apt:
+    sources:
+      # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
+      # if we don't specify this source, the libstdc++6 we get is the wrong version
+      - ubuntu-toolchain-r-test 
+    packages:
+      - libstdc++6
+      - fonts-droid
+      - xvfb
+
+env:
+  global:
+    - FLUTTER_INSTALL_DIR=$HOME/flutter
+  matrix:
+    - IMAGE="system-images;android-22;default;armeabi-v7a"
+
+install: ./travis-install-flutter.sh "$FLUTTER_INSTALL_DIR"
+
+# paradoxically, parallelizing these tests actually slows down testing
+script:
+  - ${FLUTTER_INSTALL_DIR}/bin/flutter analyze
+  - ${FLUTTER_INSTALL_DIR}/bin/flutter test
+  - ./travis-run-emulator.sh "$IMAGE"
+  - ${FLUTTER_INSTALL_DIR}/bin/flutter drive --target=test_driver/app.dart
+
+cache:
+  directories:
+  - $HOME/.pub-cache
+  - $FLUTTER_INSTALL_DIR
