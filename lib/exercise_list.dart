@@ -29,7 +29,7 @@ class _ExerciseListState extends State<ExerciseList> {
 
   Widget _buildList() {
     return new FutureBuilder(
-      key: Key('list'),
+      key: Key('exercise list'),
       future: getExercises(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {

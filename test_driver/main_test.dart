@@ -4,9 +4,13 @@ import 'package:test/test.dart';
 void main() {
   group('MVP', () {
     final exerciseFooFinder = find.byValueKey('exercise 1');
+    final exercisesTabFinder = find.byValueKey('exercises tab');
+    final workoutTabFinder = find.byValueKey('workout tab');
+    final exerciseListFinder = find.byValueKey('exercise list');
     final addExerciseButtonFinder = find.byValueKey('add new exercise button');
     final exerciseNameFinder = find.byValueKey('exercise name');
     final exerciseSubmitFinder = find.byValueKey('submit new exercise');
+    final workoutGeneratorButtonFinder = find.byValueKey('generate workout button');
 
     FlutterDriver driver;
 
@@ -23,13 +27,13 @@ void main() {
     test('Add new exercise to database', () async {
       // avoid false positives by ensuring the database is empty first
       try {
-        await driver.getText(listEntryFinder);
+        await driver.getText(exerciseListFinder);
         fail('list entry found when none should exist');
       } catch(e) {
         expect(e, isInstanceOf<DriverError>());
       }
 
-      await driver.tap(exercisesTab);
+      await driver.tap(exercisesTabFinder);
       await driver.tap(addExerciseButtonFinder);
       await driver.tap(exerciseNameFinder);
       await driver.enterText('foo');
@@ -37,8 +41,11 @@ void main() {
 
       expect(await driver.getText(exerciseFooFinder), 'foo');
 
-      await driver.tap(workoutGeneratorTabFinder);
-      await driver.tap(generateWorkoutButtonFinder);
+      await driver.tap(workoutTabFinder);
+      await driver.tap(workoutGeneratorButtonFinder);
+
+      // TODO: develop more accurate tests for workout list
+      expect(await driver.getText(exerciseFooFinder), 'foo');
     });
   });
 }

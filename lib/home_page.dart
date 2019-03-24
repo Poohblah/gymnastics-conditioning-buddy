@@ -24,8 +24,8 @@ class _HomePageState extends State<HomePage> {
           title: Text('Gymnastics Conditioning Buddy'),
           bottom: TabBar(
             tabs: [
-              Tab(text: 'Exercises'),
-              Tab(text: 'Workout'),
+              Tab(text: 'Exercises', key: Key('exercises tab')),
+              Tab(text: 'Workout', key: Key('workout tab')),
             ]
           ),
         ),

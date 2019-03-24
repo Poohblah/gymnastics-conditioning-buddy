@@ -1,6 +1,6 @@
 import 'package:flutter_driver/driver_extension.dart';
 
-import 'package:jays_first_app/main.dart' as app;
+import 'package:gymnastics_conditioning_buddy/main.dart' as app;
 
 void main() {
   enableFlutterDriverExtension();
