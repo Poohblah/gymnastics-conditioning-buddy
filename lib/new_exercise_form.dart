@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'thing.dart';
-import 'my_database_provider.dart';
+import 'exercise.dart';
+import 'database_provider.dart';
 
-class MyThingForm extends StatefulWidget {
+class NewExerciseForm extends StatefulWidget {
   @override
-  MyThingFormState createState() {
-    return MyThingFormState();
+  NewExerciseFormState createState() {
+    return NewExerciseFormState();
   }
 }
 
-class MyThingFormState extends State<MyThingForm> {
+class NewExerciseFormState extends State<NewExerciseForm> {
   // Create a global key that will uniquely identify the Form widget and allow
   // us to validate the form
   //
-  // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyThingFormState>!
+  // Note: This is a GlobalKey<FormState>, not a GlobalKey<NewExerciseFormState>!
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
-  final _numberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('New Thing')),
+      appBar: AppBar(title: Text('New Exercise')),
       body: _build(context),
     );
   }
@@ -31,7 +30,6 @@ class MyThingFormState extends State<MyThingForm> {
   @override
   void dispose() {
     _nameController.dispose();
-    _numberController.dispose();
     super.dispose();
   }
 
@@ -42,7 +40,7 @@ class MyThingFormState extends State<MyThingForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-            key: Key('name'),
+            key: Key('exercise name'),
             controller: _nameController,
             validator: (value) {
               if (value.isEmpty) {
@@ -50,20 +48,10 @@ class MyThingFormState extends State<MyThingForm> {
               }
             },
           ),
-          TextFormField(
-            key: Key('number'),
-            controller: _numberController,
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value.isEmpty || !_isNumeric(value)) {
-                return 'Please enter a number';
-              }
-            },
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
-              key: Key('submit'),
+              key: Key('submit new exercise'),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   _submit();
@@ -79,8 +67,8 @@ class MyThingFormState extends State<MyThingForm> {
   }
 
   void _submit() {
-    Thing t = Thing(name: _nameController.text, number: int.parse(_numberController.text));
-    MyDatabaseProvider().insertThing(t);
+    Exercise t = Exercise(name: _nameController.text);
+    DatabaseProvider().insertExercise(t);
   }
 
   bool _isNumeric(String s) {

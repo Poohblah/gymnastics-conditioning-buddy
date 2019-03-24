@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'thing.dart';
-import 'my_database_provider.dart';
-import 'my_thing_form.dart';
+import 'exercise.dart';
+import 'database_provider.dart';
+import 'new_exercise_form.dart';
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var _things = <Thing>[];
+class _HomePageState extends State<HomePage> {
+  var _exercises = <Exercise>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
@@ -19,10 +19,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: _buildList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => MyThingForm())); },
-        tooltip: 'Add Thing',
+        onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => NewExerciseForm())); },
+        tooltip: 'Add Exercise',
         child: Icon(Icons.add),
-        key: Key('add new thing'),
+        key: Key('add new exercise button'),
       ),
     );
   }
@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildList() {
     return new FutureBuilder(
       key: Key('list'),
-      future: getThings(),
+      future: getExercises(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -41,27 +41,25 @@ class _MyHomePageState extends State<MyHomePage> {
             return Text('connection waiting...');
           case ConnectionState.done:
             if (snapshot.hasError) return Text("Error: ${snapshot.error}");
-            _things = snapshot.data;
-            return _buildThings();
+            _exercises = snapshot.data;
+            return _buildExercises();
         }
       },
     );
   }
 
-  Widget _buildThings() {
+  Widget _buildExercises() {
     return ListView.separated(
       padding: const EdgeInsets.all(16.0),
-      itemCount: _things.length,
+      itemCount: _exercises.length,
       itemBuilder: (context, i) {
-        final Thing thing = _things[i];
-
-        return _buildRow("${thing.id}: ${thing.name}, ${thing.number}");
+        return _buildRow(_exercises[i]);
       },
       separatorBuilder: (_context, _i) { return Divider(); },
     );
   }
 
-  Widget _buildRow(String stuff) {
-    return ListTile(title: Text(stuff, key: Key('list entry'), style:_biggerFont));
+  Widget _buildRow(Exercise exercise) {
+    return ListTile(title: Text(exercise.name, key: Key("exercise ${exercise.id}"), style:_biggerFont));
   }
 }
