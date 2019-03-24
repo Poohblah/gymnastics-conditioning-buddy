@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'exercise.dart';
 import 'database_provider.dart';
-import 'new_exercise_form.dart';
+import 'exercise_list.dart';
+import 'workout_generator.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,50 +17,25 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => NewExerciseForm())); },
-        tooltip: 'Add Exercise',
-        child: Icon(Icons.add),
-        key: Key('add new exercise button'),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Gymnastics Conditioning Buddy'),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Exercises'),
+              Tab(text: 'Workout'),
+            ]
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            ExerciseList(),
+            WorkoutGenerator(),
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _buildList() {
-    return new FutureBuilder(
-      key: Key('list'),
-      future: getExercises(),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return Text('no connection state');
-          case ConnectionState.active:
-            return Text('connection active...');
-          case ConnectionState.waiting:
-            return Text('connection waiting...');
-          case ConnectionState.done:
-            if (snapshot.hasError) return Text("Error: ${snapshot.error}");
-            _exercises = snapshot.data;
-            return _buildExercises();
-        }
-      },
-    );
-  }
-
-  Widget _buildExercises() {
-    return ListView.separated(
-      padding: const EdgeInsets.all(16.0),
-      itemCount: _exercises.length,
-      itemBuilder: (context, i) {
-        return _buildRow(_exercises[i]);
-      },
-      separatorBuilder: (_context, _i) { return Divider(); },
-    );
-  }
-
-  Widget _buildRow(Exercise exercise) {
-    return ListTile(title: Text(exercise.name, key: Key("exercise ${exercise.id}"), style:_biggerFont));
   }
 }

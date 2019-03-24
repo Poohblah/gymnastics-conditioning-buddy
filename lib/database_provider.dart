@@ -24,7 +24,6 @@ class DatabaseProvider {
     var path = join(await getDatabasesPath(), 'exercise_database.db');
     // re-create the database every time for testing purposes
     var f = File(path);
-    f.delete();
     return await openDatabase(
       path,
       onCreate: (db, version) {
@@ -50,6 +49,22 @@ class DatabaseProvider {
   Future<List<Exercise>> getAllExercises() async {
     var db = await getDatabase();
     final List<Map<String, dynamic>> maps = await db.query('exercises');
+
+    // Convert the List<Map<String, dynamic> into a List<Exercise>.
+    return List.generate(maps.length, (i) {
+      return Exercise(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+      );
+    });
+  }
+
+  Future<List<Exercise>> getRandomExercises({int limit: 10}) async {
+    var db = await getDatabase();
+
+    var query = "SELECT * from exercises ORDER BY RANDOM() LIMIT ${limit}";
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery(query);
 
     // Convert the List<Map<String, dynamic> into a List<Exercise>.
     return List.generate(maps.length, (i) {

@@ -12,10 +12,7 @@ class GymnasticsConditioningBuddy extends StatelessWidget {
     return MaterialApp(
       title: 'Gymnastics Conditioning Buddy',
       theme: ThemeData(primarySwatch: Colors.green),
-      home: Scaffold(
-        appBar: AppBar(title: Text('Gymnastics Conditioning Buddy')),
-        body:   Center(child: HomePage()),
-      ),
+      home: HomePage(),
     );
   }
 }
