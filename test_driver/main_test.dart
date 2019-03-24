@@ -30,7 +30,7 @@ void main() {
         await driver.getText(exerciseListFinder);
         fail('list entry found when none should exist');
       } catch(e) {
-        expect(e, isInstanceOf<DriverError>());
+        expect(e, new TypeMatcher<DriverError>());
       }
 
       await driver.tap(exercisesTabFinder);

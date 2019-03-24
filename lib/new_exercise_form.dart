@@ -70,8 +70,4 @@ class NewExerciseFormState extends State<NewExerciseForm> {
     Exercise t = Exercise(name: _nameController.text);
     DatabaseProvider().insertExercise(t);
   }
-
-  bool _isNumeric(String s) {
-    return int.tryParse(s) != null;
-  }
 }
