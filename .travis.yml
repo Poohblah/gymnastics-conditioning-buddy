@@ -30,7 +30,7 @@ script:
   - ${FLUTTER_INSTALL_DIR}/bin/flutter analyze
   - ${FLUTTER_INSTALL_DIR}/bin/flutter test
   - ./travis-run-emulator.sh "$IMAGE"
-  - ${FLUTTER_INSTALL_DIR}/bin/flutter drive --target=test_driver/app.dart
+  - ${FLUTTER_INSTALL_DIR}/bin/flutter drive --target=test_driver/main.dart
 
 cache:
   directories:

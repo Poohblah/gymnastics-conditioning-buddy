@@ -1,5 +1,5 @@
-name: travis_testing
-description: A new Flutter project.
+name: gymnastics_conditioning_buddy
+description: An app for randomly generating gymnastics conditioning workouts.
 
 version: 0.1.0
 

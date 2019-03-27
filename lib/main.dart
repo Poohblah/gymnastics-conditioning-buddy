@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'thing.dart';
-import 'my_database_provider.dart';
-import 'my_home_page.dart';
+import 'home_page.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(GymnasticsConditioningBuddy());
 
-class MyApp extends StatelessWidget {
+class GymnasticsConditioningBuddy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MaterialApp Title',
+      title: 'Gymnastics Conditioning Buddy',
       theme: ThemeData(primarySwatch: Colors.green),
-      home: Scaffold(
-        appBar: AppBar(title: Text('AppBar Title')),
-        body:   Center(child: MyHomePage()),
-      ),
+      home: HomePage(),
     );
   }
 }
