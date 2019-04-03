@@ -56,10 +56,10 @@ class DatabaseProvider {
     });
   }
 
-  Future<List<Exercise>> getRandomExercises({int limit: 10}) async {
+  Future<List<Exercise>> getRandomExercises({int limit: 10, List<Exercise> exclude: const <Exercise>[]}) async {
     var db = await getDatabase();
 
-    var query = "SELECT * from exercises ORDER BY RANDOM() LIMIT $limit";
+    var query = "SELECT * from exercises WHERE id NOT IN (${exclude.map((e) { return e.id; }).join(', ')}) ORDER BY RANDOM() LIMIT $limit";
 
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
 

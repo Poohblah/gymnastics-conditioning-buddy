@@ -21,7 +21,7 @@ class _WorkoutGeneratorState extends State<WorkoutGenerator> {
     return Scaffold(
       body: _buildWorkout(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { _generateExercises(); },
+        onPressed: () { _generateAllExercises(); },
         tooltip: 'Generate Workout',
         child: Icon(Icons.shuffle),
         key: Key('generate workout button'),
@@ -29,43 +29,37 @@ class _WorkoutGeneratorState extends State<WorkoutGenerator> {
     );
   }
 
-  Future<void> _generateExercises() async {
+  Future<void> _generateSingleExercise(int index) async {
+    List<Exercise> e = await _dbp.getRandomExercises(limit: 1, exclude: _exercises);
+    // List<Exercise> e = await _dbp.getRandomExercises(limit: 1);
+    _exercises[index] = e[0];
+    setState(() {});
+  }
+
+  Future<void> _generateAllExercises() async {
+    _exercises = await _dbp.getRandomExercises();
     setState(() {});
   }
 
   Widget _buildWorkout() {
-    return new FutureBuilder(
-      key: Key('list'),
-      future: _dbp.getRandomExercises(),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return Text('no connection state');
-          case ConnectionState.active:
-            return Text('connection active...');
-          case ConnectionState.waiting:
-            return Text('connection waiting...');
-          case ConnectionState.done:
-            if (snapshot.hasError) return Text("Error: ${snapshot.error}");
-            _exercises = snapshot.data;
-            return _buildExerciseList();
-        }
-      },
-    );
-  }
-
-  Widget _buildExerciseList() {
     return ListView.separated(
       padding: const EdgeInsets.all(16.0),
       itemCount: _exercises.length,
-      itemBuilder: (context, i) {
-        return _buildRow(_exercises[i]);
-      },
+      itemBuilder: (context, i) { return _buildRow(i); },
       separatorBuilder: (_context, _i) { return Divider(); },
     );
   }
 
-  Widget _buildRow(Exercise exercise) {
-    return ListTile(title: Text(exercise.name, key: Key("exercise ${exercise.id}"), style:_biggerFont));
+  Widget _buildRow(int index) {
+    Exercise exercise = _exercises[index];
+    return ListTile(
+      title: Text(exercise.name, key: Key("exercise ${exercise.id}"), style:_biggerFont),
+      trailing: FloatingActionButton(
+        onPressed: () { _generateSingleExercise(index); },
+        tooltip: 'Regenerate Exercise',
+        child: Icon(Icons.shuffle, size: 16.0),
+        mini: true,
+      )
+    );
   }
 }
