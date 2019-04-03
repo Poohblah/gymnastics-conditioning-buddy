@@ -14,24 +14,28 @@ class WorkoutGenerator extends StatefulWidget {
 class _WorkoutGeneratorState extends State<WorkoutGenerator> {
   var _dbp = new DatabaseProvider();
   var _exercises = <Exercise>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   Widget build(BuildContext context) {
+    if (_exercises.isEmpty) { _generateAllExercises(); }
     return Scaffold(
-      body: _buildWorkout(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () { _generateAllExercises(); },
-        tooltip: 'Generate Workout',
-        child: Icon(Icons.shuffle),
-        key: Key('generate workout button'),
+      appBar: AppBar(
+        title: Text('Workout Generator'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () { _generateAllExercises(); },
+            tooltip: 'Regenerate All Exercises',
+            icon: Icon(Icons.shuffle),
+            key: Key('add new exercise button'),
+          ),
+        ]
       ),
+      body: _buildWorkout(),
     );
   }
 
   Future<void> _generateSingleExercise(int index) async {
     List<Exercise> e = await _dbp.getRandomExercises(limit: 1, exclude: _exercises);
-    // List<Exercise> e = await _dbp.getRandomExercises(limit: 1);
     _exercises[index] = e[0];
     setState(() {});
   }
@@ -53,7 +57,7 @@ class _WorkoutGeneratorState extends State<WorkoutGenerator> {
   Widget _buildRow(int index) {
     Exercise exercise = _exercises[index];
     return ListTile(
-      title: Text(exercise.name, key: Key("exercise ${exercise.id}"), style:_biggerFont),
+      title: Text(exercise.name, key: Key("exercise ${exercise.id}")),
       trailing: FloatingActionButton(
         onPressed: () { _generateSingleExercise(index); },
         tooltip: 'Regenerate Exercise',

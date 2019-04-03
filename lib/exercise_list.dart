@@ -12,18 +12,22 @@ class ExerciseList extends StatefulWidget {
 
 class _ExerciseListState extends State<ExerciseList> {
   var _exercises = <Exercise>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => NewExerciseForm())); },
-        tooltip: 'Add Exercise',
-        child: Icon(Icons.add),
-        key: Key('add new exercise button'),
+      appBar: AppBar(
+        title: Text('Exercise Database'),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => NewExerciseForm())); },
+            tooltip: 'Add Exercise',
+            icon: Icon(Icons.add),
+            key: Key('add new exercise button'),
+          ),
+        ]
       ),
+      body: _buildList(),
     );
   }
 
@@ -60,6 +64,6 @@ class _ExerciseListState extends State<ExerciseList> {
   }
 
   Widget _buildRow(Exercise exercise) {
-    return ListTile(title: Text(exercise.name, key: Key("exercise ${exercise.id}"), style:_biggerFont));
+    return ListTile(title: Text(exercise.name, key: Key("exercise ${exercise.id}")));
   }
 }

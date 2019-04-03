@@ -12,24 +12,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Gymnastics Conditioning Buddy'),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'Exercises', key: Key('exercises tab')),
-              Tab(text: 'Workout', key: Key('workout tab')),
-            ]
+    return Scaffold(
+      appBar: AppBar(title: Text('Gymnastics Conditioning Buddy')),
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.fitness_center),
+            title: Text('Exercise Database'),
+            onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => ExerciseList())); },
           ),
-        ),
-        body: TabBarView(
-          children: [
-            ExerciseList(),
-            WorkoutGenerator(),
-          ],
-        ),
+          ListTile(
+            leading: Icon(Icons.directions_run),
+            title: Text('Generate Workout'),
+            onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutGenerator())); },
+          ),
+        ],
       ),
     );
   }
